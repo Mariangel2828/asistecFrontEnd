@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "asistec",
+    "name": "Asistec",
     "slug": "asistec",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,6 +12,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.rooseveltalej.asistec",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -36,6 +37,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2cb9475e-a091-480a-963e-99cf3302aaff"
+      }
+    },
+    "owner": "rooseveltalej"
   }
 }
