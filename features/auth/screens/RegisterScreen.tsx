@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'expo-router';
 import {
-  View, Text, Image, StyleSheet, TouchableOpacity,
+    View, Text, Image, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
 import { useRegister } from '../hooks/useRegister';
