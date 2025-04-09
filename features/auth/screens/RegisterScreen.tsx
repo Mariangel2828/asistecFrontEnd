@@ -73,7 +73,7 @@ const RegisterScreen = () => {
             <Text style={styles.loginButtonText}>Crear Cuenta</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.replace('/')}>
+        <TouchableOpacity onPress={() => router.replace('/login')}>
             <Text style={styles.createAccountButton}>
             ¿Ya tienes una cuenta?{' '}
             <Text style={{ color: 'black' }}>Inicia sesión</Text>
