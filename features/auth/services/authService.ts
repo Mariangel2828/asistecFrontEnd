@@ -7,7 +7,7 @@ export const registerUser = async (userData: {
     area_id: string;
     password: string;
 }) => {
-    const response = await api.post('/api/users/user_create', userData);
+    const response = await api.post('/api/users/user_create', userData); // this function is used to call the api and register the user
     return response.data;
 };
 

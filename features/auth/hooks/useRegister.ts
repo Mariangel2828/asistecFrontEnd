@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 
 
 export const useRegister = () => {
+    // this hook is used to manage the registration process
     const navigation = useNavigation();
     const router = useRouter();
 
@@ -16,10 +17,10 @@ export const useRegister = () => {
 
     const handleRegister = async () => {
     try {
-        await registerUser({ name, lastname, mail: email, area_id: areaId, password });
+        await registerUser({ name, lastname, mail: email, area_id: areaId, password }); // this function is used to register the user when we had the data
         alert('Usuario creado exitosamente');
         clearFields();
-        router.replace('/');
+        router.replace('/login');
     } catch (error: any) {
         console.error(error.response || error);
         alert(error.response?.data?.detail || 'Ocurrió un error al crear el usuario.');

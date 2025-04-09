@@ -7,7 +7,7 @@ import { Input, Icon } from 'react-native-elements';
 import { useRegister } from '../hooks/useRegister';
 
 const RegisterScreen = () => {
-    const router = useRouter();
+    const router = useRouter(); // Import the router from expo-router this is used to navigate between screens
     const {
         name, setName,
         lastname, setLastName,
@@ -15,7 +15,7 @@ const RegisterScreen = () => {
         areaId, setAreaId,
         password, setPassword,
         handleRegister,
-    } = useRegister();
+    } = useRegister(); // Import the custom hook for handling registration logic
 
     return (
         <View style={styles.container}>
