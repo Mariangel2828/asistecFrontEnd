@@ -1,19 +1,21 @@
 import React, { createContext, useContext, useState } from 'react';
 
 export type AuthData = {
-  user: any; 
+    userId: string;
+    email: string;
+    fullname: string;
 };
 
-const AuthContext = createContext<any>(null);
+    const AuthContext = createContext<any>(null);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [auth, setAuth] = useState<AuthData | null>(null);
+    export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [auth, setAuth] = useState<AuthData | null>(null);
 
-  return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    return (
+        <AuthContext.Provider value={{ auth, setAuth }}>
+        {children}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => useContext(AuthContext);
