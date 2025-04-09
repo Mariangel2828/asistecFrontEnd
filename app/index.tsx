@@ -12,6 +12,7 @@ export default function Index() {
       <Text>Bienvenido a Asistec 👋</Text>
       <Button title="Ir a crear cuenta" onPress={() => router.push('/register')} />
       <Button title="Ir a iniciar sesión" onPress={() => router.push('/login')} />
+      <Button title="Ir a home" onPress={() => router.push('/home')} />
 
       <AuthStatus />
     </View>

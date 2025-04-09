@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 
 export const AuthStatus = () => {
+  // this component is just for testing purposes 
+  // and will be removed in the final version
   const { auth } = useAuth();
 
   if (!auth) {
