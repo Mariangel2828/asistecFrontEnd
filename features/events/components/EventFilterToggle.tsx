@@ -8,6 +8,22 @@ type Props = {
 
 const options = ['evento', 'curso', 'actividad'];
 
+    /**
+     * EventFilterToggle
+     *
+     * Componente que muestra un grupo de botones tipo toggle para seleccionar el tipo de evento a visualizar.
+     * Los botones disponibles son: "evento", "curso" y "actividad".
+     * El botón seleccionado se resalta visualmente.
+     *
+     * Props:
+     * - selected (string): Valor actualmente seleccionado. Debe ser uno de: "evento", "curso", "actividad".
+     * - onChange (function): Callback que se ejecuta al presionar un botón.
+     *                        Recibe como argumento el nuevo valor seleccionado.
+     *
+     * Uso:
+     * <EventFilterToggle selected="curso" onChange={(val) => setFilter(val)} />
+     */
+
 export default function EventFilterToggle({ selected, onChange }: Props) {
     return (
         <View style={styles.container}>

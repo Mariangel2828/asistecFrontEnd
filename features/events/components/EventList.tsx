@@ -12,6 +12,23 @@ type Props = {
     events: EventItem[];
 };
 
+    /**
+     * EventList
+     * 
+     * Componente que muestra una lista de eventos en forma de tarjetas.
+     * Utiliza `FlatList` para renderizar los eventos proporcionados.
+     * Si no hay eventos, muestra un mensaje indicando que no hay eventos para la fecha actual.
+     * 
+     * Props:
+     * - events (EventItem[]): Arreglo de eventos a mostrar. Cada evento debe tener:
+     *    - id: Identificador único (string)
+     *    - title: Título del evento (string)
+     *    - date: Fecha del evento en formato ISO (string)
+     * 
+     * Uso:
+     * <EventList events={[{ id: '1', title: 'Conferencia', date: '2025-04-10' }]} />
+     */
+
 export default function EventList({ events }: Props) {
     if (!events.length) {
         return <Text style={styles.empty}>No hay eventos para esta fecha.</Text>;

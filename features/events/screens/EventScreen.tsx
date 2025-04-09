@@ -8,6 +8,30 @@ import { useUserCourses } from '../hooks/useUserCourses';
 import { useUserActivities } from '../hooks/useUserActivities';
 import moment from 'moment';
 
+
+    /**
+     * EventsScreen
+     *
+     * Pantalla principal para visualizar los eventos del usuario.
+     * Permite alternar entre tres tipos de eventos: "evento", "curso" y "actividad",
+     * utilizando un toggle, y seleccionar una fecha en un calendario interactivo.
+     * Solo se muestran los eventos del tipo y fecha seleccionados.
+     *
+     * Componentes utilizados:
+     * - EventFilterToggle: permite seleccionar el tipo de evento.
+     * - CalendarView: calendario que permite seleccionar la fecha.
+     * - EventList: muestra los eventos del tipo y día seleccionados.
+     *
+     * Hooks personalizados:
+     * - useUserEvents: obtiene los eventos generales del usuario.
+     * - useUserCourses: obtiene los cursos del usuario.
+     * - useUserActivities: obtiene las actividades del usuario.
+     *
+     * Estado local:
+     * - filter: tipo de evento actualmente seleccionado ('evento' | 'curso' | 'actividad').
+     * - selectedDate: fecha actualmente seleccionada en formato 'YYYY-MM-DD'.
+     */
+
 export default function EventsScreen() {
     const [filter, setFilter] = useState<'evento' | 'curso' | 'actividad'>('evento');
     const [selectedDate, setSelectedDate] = useState<string>(moment().format('YYYY-MM-DD'));
