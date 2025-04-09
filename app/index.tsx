@@ -13,6 +13,7 @@ export default function Index() {
       <Button title="Ir a crear cuenta" onPress={() => router.push('/register')} />
       <Button title="Ir a iniciar sesión" onPress={() => router.push('/login')} />
       <Button title="Ir a home" onPress={() => router.push('/home')} />
+      <Button title="Ir a eventos" onPress={() => router.push('/events')} />
 
       <AuthStatus />
     </View>
