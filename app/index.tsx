@@ -14,6 +14,7 @@ export default function Index() {
       <Button title="Ir a iniciar sesión" onPress={() => router.push('/login')} />
       <Button title="Ir a home" onPress={() => router.push('/home')} />
       <Button title="Ir a eventos" onPress={() => router.push('/events')} />
+      <Button title="Ir a canales" onPress={() => router.push('/channels')} />
 
       <AuthStatus />
     </View>
