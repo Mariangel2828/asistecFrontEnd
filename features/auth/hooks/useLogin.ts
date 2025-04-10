@@ -26,7 +26,7 @@ export const useLogin = () => {
             };
             setAuth(authData);
             clearFields();
-            router.replace('/');
+            router.replace('/(tabs)/home');
         } catch (error: any) {
             const detail = error?.response?.data?.detail;
             if (detail === 'Inactive') {
