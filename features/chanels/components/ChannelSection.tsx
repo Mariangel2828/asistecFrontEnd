@@ -14,7 +14,32 @@ type Props = {
     isSubscribed: boolean;
     onPress: (channel: Channel) => void;
     emptyMessage: string;
+    onUnsubscribe?: (channel: Channel) => void; 
 };
+
+
+/**
+ * ChannelSection
+ *
+ * Componente que muestra una sección de canales, como por ejemplo:
+ * - "Canales suscritos"
+ * - "Canales disponibles"
+ *
+ * Se apoya en el componente `ChannelCard` para renderizar cada canal individualmente.
+ * También muestra un mensaje cuando la lista está vacía.
+ *
+ * Props:
+ * - title (string): Título de la sección (ej: "🔔 Canales suscritos").
+ * - channels (Channel[]): Arreglo de canales a mostrar. Cada canal debe tener:
+ *     - channel_id: número único
+ *     - channel_name: nombre del canal
+ *     - description: descripción breve
+ * - isSubscribed (boolean): Indica si los canales de esta sección son suscritos.
+ * - onPress (function): Callback que se ejecuta al presionar el botón principal del canal.
+ * - emptyMessage (string): Mensaje que se muestra si `channels` está vacío.
+ * - onUnsubscribe (function, opcional): Callback que se ejecuta al presionar "Desuscribirse".
+ *     Solo se utiliza si `isSubscribed` es `true`.
+ */
 
 export default function ChannelSection({
     title,
@@ -22,9 +47,10 @@ export default function ChannelSection({
     isSubscribed,
     onPress,
     emptyMessage,
+    onUnsubscribe,
 }: Props) {
-    return (
-        <>
+return (
+    <>
         <Text style={styles.sectionTitle}>{title}</Text>
         <FlatList
             data={channels}
@@ -35,6 +61,11 @@ export default function ChannelSection({
                 description={item.description}
                 isSubscribed={isSubscribed}
                 onPress={() => onPress(item)}
+                onUnsubscribe={
+                isSubscribed && onUnsubscribe
+                    ? () => onUnsubscribe(item)
+                    : undefined
+                }
             />
             )}
             ListEmptyComponent={<Text style={styles.empty}>{emptyMessage}</Text>}
