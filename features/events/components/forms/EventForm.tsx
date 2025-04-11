@@ -24,8 +24,55 @@ type Props = {
   allDay: boolean;
   onChangeAllDay: (value: boolean) => void;
   onSubmit: () => void;
-  
 };
+
+/**
+ * @module EventForm
+ * 
+ * @description
+ * Componente de formulario reutilizable para la creación de eventos.
+ * Permite al usuario ingresar título, descripción, fecha, horario y si el evento es de todo el día.
+ * Es controlado completamente mediante props y callbacks para mantener el estado externo.
+ * 
+ * @param props - Propiedades necesarias para controlar el formulario
+ * @param props.type - Tipo de entidad a crear: 'evento' en este caso,
+ * @param props.title - Título del evento
+ * @param props.onChangeTitle - Callback para actualizar el título
+ * @param props.description - Descripción del evento
+ * @param props.onChangeDescription - Callback para actualizar la descripción
+ * @param props.date - Fecha seleccionada del evento
+ * @param props.onChangeDate - Callback para actualizar la fecha
+ * @param props.startHour - Hora de inicio del evento (si no es todo el día)
+ * @param props.onChangeStartHour - Callback para actualizar la hora de inicio
+ * @param props.endHour - Hora de finalización del evento (si no es todo el día)
+ * @param props.onChangeEndHour - Callback para actualizar la hora de finalización
+ * @param props.allDay - Si el evento es de todo el día
+ * @param props.onChangeAllDay - Callback para alternar el estado de todo el día
+ * @param props.onSubmit - Callback que se ejecuta al enviar el formulario
+ * 
+ * @returns JSX.Element
+ * 
+ * @example
+ * <EventForm
+ *   type="evento"
+ *   title={title}
+ *   onChangeTitle={setTitle}
+ *   description={description}
+ *   onChangeDescription={setDescription}
+ *   date={date}
+ *   onChangeDate={setDate}
+ *   startHour={startHour}
+ *   onChangeStartHour={setStartHour}
+ *   endHour={endHour}
+ *   onChangeEndHour={setEndHour}
+ *   allDay={allDay}
+ *   onChangeAllDay={setAllDay}
+ *   onSubmit={handleSubmit}
+ * />
+ */
+
+
+
 
 export default function EventForm({
   type,

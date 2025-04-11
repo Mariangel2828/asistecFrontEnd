@@ -45,6 +45,45 @@ const days = [
     { key: 'sunday', label: 'Domingo' },
 ];
 
+/**
+ * @module ActivityForm
+ * 
+ * @description
+ * Componente de formulario para la creación de actividades recurrentes.
+ * Permite ingresar título, fechas de inicio y fin, ubicación y establecer horarios por día de la semana.
+ * Usa `DateTimePicker` para seleccionar fechas y horas. Controlado mediante props externas.
+ * 
+ * @param props - Propiedades necesarias para controlar el formulario
+ * @param props.title - Título de la actividad
+ * @param props.startDate - Fecha de inicio de la actividad
+ * @param props.endDate - Fecha de finalización de la actividad
+ * @param props.location - Ubicación donde se realiza la actividad
+ * @param props.schedule - Objeto que define los días activos y su horario (start_time y end_time)
+ * @param props.onChangeTitle - Callback para actualizar el título
+ * @param props.onChangeStartDate - Callback para actualizar la fecha de inicio
+ * @param props.onChangeEndDate - Callback para actualizar la fecha de finalización
+ * @param props.onChangeLocation - Callback para actualizar la ubicación
+ * @param props.onChangeScheduleDay - Callback para actualizar el estado activo y horarios de un día específico
+ * @param props.onSubmit - Callback que se ejecuta al presionar el botón de crear
+ * 
+ * @returns JSX.Element
+ * 
+ * @example
+ * <ActivityForm
+ *   title={title}
+ *   startDate={startDate}
+ *   endDate={endDate}
+ *   location={location}
+ *   schedule={schedule}
+ *   onChangeTitle={setTitle}
+ *   onChangeStartDate={setStartDate}
+ *   onChangeEndDate={setEndDate}
+ *   onChangeLocation={setLocation}
+ *   onChangeScheduleDay={handleScheduleChange}
+ *   onSubmit={handleSubmit}
+ * />
+ */
+
 export default function ActivityForm({
     title,
     startDate,

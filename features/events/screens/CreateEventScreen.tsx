@@ -12,6 +12,34 @@ import { useCourseForm } from '../hooks/hooksForForms/useCourseForm';
 import { useActivityForm } from '../hooks/hooksForForms/useActivityForm';
 import moment from 'moment';
 
+
+/**
+ * CreateEventScreen
+ * 
+ * Pantalla que permite la creación de un evento, curso o actividad.
+ * Ofrece un formulario dinámico según el tipo seleccionado mediante un toggle.
+ *
+ * Características:
+ * - Usa un toggle (`EventTypeToggle`) para alternar entre tres tipos: 'evento', 'curso', 'actividad'.
+ * - Cada tipo tiene su propio formulario (`EventForm`, `CourseForm`, `ActivityForm`) y estado aislado mediante hooks personalizados:
+ *    - `useEventForm` para eventos
+ *    - `useCourseForm` para cursos
+ *    - `useActivityForm` para actividades
+ * - Al enviar el formulario, se construye un payload diferente según el tipo seleccionado y se envía a la API mediante `useCreateEvent`.
+ * - Muestra alertas si hay errores de validación antes del envío.
+ * - Redirige a la lista de eventos tras una creación exitosa.
+ *
+ * Hooks utilizados:
+ * - `useEventForm`: manejo del estado del formulario de evento.
+ * - `useCourseForm`: manejo del estado del formulario de curso.
+ * - `useActivityForm`: manejo del estado del formulario de actividad.
+ * - `useAuth`: contexto de autenticación para obtener el ID del usuario.
+ * - `useCreateEvent`: hook para enviar el evento al backend.
+ * - `useRouter`: navegación con `expo-router`.
+ *
+ * @returns {JSX.Element} Componente visual para crear eventos/cursos/actividades.
+ */
+
 export default function CreateEventScreen() {
   const [type, setType] = useState<'evento' | 'curso' | 'actividad'>('evento');
 

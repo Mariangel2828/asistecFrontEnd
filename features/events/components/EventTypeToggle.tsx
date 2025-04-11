@@ -8,6 +8,26 @@ type Props = {
 
 const options: Array<'evento' | 'curso' | 'actividad'> = ['evento', 'curso', 'actividad'];
 
+/**
+ * EventTypeToggle
+ *
+ * Componente visual para seleccionar el tipo de entidad a crear o visualizar:
+ * "evento", "curso" o "actividad".
+ *
+ * Muestra tres botones (uno por cada opción) y aplica estilos distintos al botón seleccionado.
+ *
+ * Props:
+ * @param selected - Tipo actualmente seleccionado. Puede ser: 'evento', 'curso' o 'actividad'.
+ * @param onChange - Función de callback que se ejecuta cuando se selecciona una nueva opción.
+ *
+ * Ejemplo de uso:
+ * ```tsx
+ * <EventTypeToggle selected="evento" onChange={(type) => setType(type)} />
+ * ```
+ *
+ * @returns {JSX.Element} Botones de alternancia con la opción seleccionada resaltada.
+ */
+
 export default function EventTypeToggle({ selected, onChange }: Props) {
   return (
     <View style={styles.container}>
