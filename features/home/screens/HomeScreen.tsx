@@ -24,7 +24,7 @@ export default function HomeScreen() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <EventPreview event={item} />}
       />
-      <Button title="Ver todos los eventos" onPress={() => router.push('/') /**/} />
+      <Button title="Ver todos los eventos" onPress={() => router.push('/(tabs)/events') /**/} />
 
       <Text style={styles.sectionTitle}>📰 Últimas noticias</Text>
       <FlatList
@@ -32,7 +32,7 @@ export default function HomeScreen() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <NewsPreview news={item} />}
       />
-      <Button title="Ver todas las noticias" onPress={() => router.push('/') /**/} />
+      <Button title="Ver todas las noticias" onPress={() => router.push('/(tabs)/channels') /**/} />
     </View>
   );
 }
