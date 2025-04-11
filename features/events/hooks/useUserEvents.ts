@@ -22,7 +22,11 @@ export const useUserEvents = () => {
             const mapped = raw.map((e: any) => ({
             id: String(e.event_id),
             title: e.event_title,
+            descripcion: e.event_description,
             date: e.event_date,
+            initialHour: e.event_start_hour,
+            finalHour: e.event_final_hour,
+            isAllDay : e.all_day,
             }));
             setEvents(mapped);
         } catch (err) {
