@@ -5,7 +5,9 @@ import { useAuth } from '@/features/auth/context/AuthContext';
 export type ActivityData = {
     id: string;
     title: string;
-    date: string; // ISO
+    startDate: string;
+    endDate: string;
+    schedule: { [key: string]: { date: string; start_time: string; end_time: string } };
 };
 
 const parseDate = (ddmmyyyy: string): string => {
@@ -22,20 +24,23 @@ const parseDate = (ddmmyyyy: string): string => {
         if (!auth?.userId) return;
 
         const loadActivities = async () => {
-        try {
-            const raw = await fetchUserActivities(auth.userId);
-            const mapped = raw.map((a: any) => ({
-            id: String(a.activity_id),
-            title: a.activity_title,
-            date: parseDate(a.activity_start_date),
-            }));
-            setActivities(mapped);
-        } catch (err) {
-            console.error('Error fetching activities:', err);
-        } finally {
-            setLoading(false);
-        }
-        };
+            try {
+                const raw = await fetchUserActivities(auth.userId);
+                const mapped = raw.map((a: any) => ({
+                    id: String(a.activity_id),
+                    title: a.activity_title,
+                    startDate: a.activity_start_date,
+                    endDate: a.activity_final_date,
+                    schedule: a.schedule,
+                    location: a.location
+                }));
+                setActivities(mapped);
+                } catch (err) {
+                console.error('Error fetching activities:', err);
+                } finally {
+                setLoading(false);
+                }
+            };
 
         loadActivities();
     }, [auth]);

@@ -7,10 +7,13 @@ type EventItem = {
     title: string;
     descripcion?: string;
     date: string;
-    initialHour?: string; // formato ISO: '2025-04-10T14:00:00'
+    initialHour?: string;
     finalHour?: string;
     isAllDay?: boolean;
+    type?: 'evento' | 'curso' | 'actividad'; 
+    location?: string; 
 };
+
 
 
 type Props = {
@@ -46,7 +49,12 @@ export default function EventList({ events }: Props) {
         renderItem={({ item }) => (
             <View style={styles.item}>
             <Text style={styles.title}>{item.title}</Text>
+            {item.type === 'actividad' && item.location && (
+            <Text style={styles.location}>📍 {item.location}</Text>
+)}
+            {item.type !== 'actividad' && item.descripcion && (
             <Text style={styles.description}>{item.descripcion}</Text>
+            )}
             <Text style={styles.date}>
             {moment(item.date).format('DD [de] MMMM [de] YYYY')}
             </Text>
@@ -86,5 +94,11 @@ const styles = StyleSheet.create({
     time: {
         fontSize: 14,
         color: '#333',
+    },
+    location: {
+        fontSize: 14,
+        fontStyle: 'italic',
+        color: '#666',
+        marginBottom: 4,
     },
 });

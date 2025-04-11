@@ -14,11 +14,24 @@ export default function CreateEventScreen() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState<Date | null>(null);
-  const [location, setLocation] = useState('virtual');
+  const [location, setLocation] = useState('');
   const [schedule, setSchedule] = useState('mañana');
   const [startHour, setStartHour] = useState<Date | null>(null);
   const [endHour, setEndHour] = useState<Date | null>(null);
   const [allDay, setAllDay] = useState(true);
+
+  const [activityStartDate, setActivityStartDate] = useState<Date>(new Date());
+  const [activityEndDate, setActivityEndDate] = useState<Date>(new Date());
+  const [activitySchedule, setActivitySchedule] = useState<Record<string, DaySchedule>>({
+    monday: { day: 'monday', active: false, start_time: '', end_time: '' },
+    tuesday: { day: 'tuesday', active: false, start_time: '', end_time: '' },
+    wednesday: { day: 'wednesday', active: false, start_time: '', end_time: '' },
+    thursday: { day: 'thursday', active: false, start_time: '', end_time: '' },
+    friday: { day: 'friday', active: false, start_time: '', end_time: '' },
+    saturday: { day: 'saturday', active: false, start_time: '', end_time: '' },
+    sunday: { day: 'sunday', active: false, start_time: '', end_time: '' },
+  });
+  
 
   const { create } = useCreateEvent();
   const { auth } = useAuth();
@@ -32,24 +45,29 @@ export default function CreateEventScreen() {
   };
 
   const handleSubmit = async () => {
-    if (!title || !date) {
-      Alert.alert('Error', 'Por favor completá los campos obligatorios.');
-      return;
-    }
-
-    if (!allDay && (!startHour || !endHour)) {
-      Alert.alert('Error', 'Debes seleccionar hora de inicio y finalización.');
-      return;
-    }
-
     const commonData = {
       user_id: auth.userId,
       notification_datetime: null,
     };
-
+  
     let payload: any = {};
-
+  
+    if (!title) {
+      Alert.alert('Error', 'El título es obligatorio.');
+      return;
+    }
+  
     if (type === 'evento') {
+      if (!date) {
+        Alert.alert('Error', 'La fecha del evento es obligatoria.');
+        return;
+      }
+  
+      if (!allDay && (!startHour || !endHour)) {
+        Alert.alert('Error', 'Debes seleccionar hora de inicio y finalización.');
+        return;
+      }
+  
       payload = {
         event_title: title,
         event_description: description,
@@ -59,7 +77,14 @@ export default function CreateEventScreen() {
         all_day: allDay,
         ...commonData,
       };
-    } else if (type === 'curso') {
+    }
+  
+    else if (type === 'curso') {
+      if (!date) {
+        Alert.alert('Error', 'La fecha del curso es obligatoria.');
+        return;
+      }
+  
       payload = {
         course_title: title,
         course_type: 'virtual',
@@ -70,17 +95,35 @@ export default function CreateEventScreen() {
         professor_id: 1,
         ...commonData,
       };
-    } else if (type === 'actividad') {
+    }
+  
+    else if (type === 'actividad') {
+      const scheduleItems = Object.values(activitySchedule).filter(s => s.active);
+  
+      if (!activityStartDate || !activityEndDate || scheduleItems.length === 0) {
+        Alert.alert('Error', 'Debes seleccionar fechas y al menos un día con horario.');
+        return;
+      }
+  
+      const formattedSchedule = scheduleItems.reduce((acc, curr, index) => {
+        acc[index + 1] = {
+          date: curr.day,
+          start_time: curr.start_time,
+          end_time: curr.end_time,
+        };
+        return acc;
+      }, {} as any);
+  
       payload = {
         activity_title: title,
-        activity_start_date: moment(date).format('YYYY-MM-DD'),
-        activity_final_date: moment(date).format('YYYY-MM-DD'),
+        activity_start_date: moment(activityStartDate).format('YYYY-MM-DD'),
+        activity_final_date: moment(activityEndDate).format('YYYY-MM-DD'),
         location,
-        schedule,
+        schedule: formattedSchedule,
         ...commonData,
       };
     }
-
+  
     try {
       await create(type, payload);
       Alert.alert('Éxito', `${type} creado correctamente.`);
@@ -90,6 +133,7 @@ export default function CreateEventScreen() {
       Alert.alert('Error', 'No se pudo crear el evento.');
     }
   };
+  
 
   const handleAllDayToggle = (value: boolean) => {
     setAllDay(value);
@@ -102,6 +146,17 @@ export default function CreateEventScreen() {
       setStartHour(null);
       setEndHour(null);
     }
+  };
+
+  const handleChangeScheduleDay = (
+    day: string,
+    field: keyof DaySchedule,
+    value: any
+  ) => {
+    setActivitySchedule((prev) => ({
+      ...prev,
+      [day]: { ...prev[day], [field]: value },
+    }));
   };
 
   return (
@@ -145,16 +200,18 @@ export default function CreateEventScreen() {
 
       {type === 'actividad' && (
         <ActivityForm
-          title={title}
-          date={date}
-          location={location}
-          schedule={schedule}
-          onChangeTitle={setTitle}
-          onChangeDate={setDate}
-          onChangeLocation={setLocation}
-          onChangeSchedule={setSchedule}
-          onSubmit={handleSubmit}
-        />
+        title={title}
+        startDate={activityStartDate}
+        endDate={activityEndDate}
+        location={location}
+        schedule={activitySchedule}
+        onChangeTitle={setTitle}
+        onChangeStartDate={setActivityStartDate}
+        onChangeEndDate={setActivityEndDate}
+        onChangeLocation={setLocation}
+        onChangeScheduleDay={handleChangeScheduleDay}
+        onSubmit={handleSubmit}
+      />      
       )}
     </ScrollView>
   );

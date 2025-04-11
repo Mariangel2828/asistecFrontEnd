@@ -11,6 +11,7 @@ export const fetchUserCourses = async (userId: number) => {
     const response = await api.get('/api/courses/user_courses', {
         params: { user_id: userId },
     });
+
     return response.data;
 };
 
