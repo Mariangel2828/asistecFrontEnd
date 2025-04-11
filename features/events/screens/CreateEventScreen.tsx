@@ -7,31 +7,17 @@ import EventTypeToggle from '../components/EventTypeToggle';
 import EventForm from '../components/forms/EventForm';
 import CourseForm from '../components/forms/CourseForm';
 import ActivityForm from '../components/forms/ActivityForm';
+import { useEventForm } from '../hooks/hooksForForms/useEventForm';
+import { useCourseForm } from '../hooks/hooksForForms/useCourseForm';
+import { useActivityForm } from '../hooks/hooksForForms/useActivityForm';
 import moment from 'moment';
 
 export default function CreateEventScreen() {
   const [type, setType] = useState<'evento' | 'curso' | 'actividad'>('evento');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState<Date | null>(null);
-  const [location, setLocation] = useState('');
-  const [schedule, setSchedule] = useState('mañana');
-  const [startHour, setStartHour] = useState<Date | null>(null);
-  const [endHour, setEndHour] = useState<Date | null>(null);
-  const [allDay, setAllDay] = useState(true);
 
-  const [activityStartDate, setActivityStartDate] = useState<Date>(new Date());
-  const [activityEndDate, setActivityEndDate] = useState<Date>(new Date());
-  const [activitySchedule, setActivitySchedule] = useState<Record<string, DaySchedule>>({
-    monday: { day: 'monday', active: false, start_time: '', end_time: '' },
-    tuesday: { day: 'tuesday', active: false, start_time: '', end_time: '' },
-    wednesday: { day: 'wednesday', active: false, start_time: '', end_time: '' },
-    thursday: { day: 'thursday', active: false, start_time: '', end_time: '' },
-    friday: { day: 'friday', active: false, start_time: '', end_time: '' },
-    saturday: { day: 'saturday', active: false, start_time: '', end_time: '' },
-    sunday: { day: 'sunday', active: false, start_time: '', end_time: '' },
-  });
-  
+  const eventForm = useEventForm();
+  const courseForm = useCourseForm();
+  const activityForm = useActivityForm();
 
   const { create } = useCreateEvent();
   const { auth } = useAuth();
@@ -49,62 +35,63 @@ export default function CreateEventScreen() {
       user_id: auth.userId,
       notification_datetime: null,
     };
-  
+
     let payload: any = {};
-  
-    if (!title) {
-      Alert.alert('Error', 'El título es obligatorio.');
-      return;
-    }
-  
+
+    
+
     if (type === 'evento') {
-      if (!date) {
+      if (!eventForm.title) {
+        Alert.alert('Error', 'El título es obligatorio.');
+        return;
+      }
+      if (!eventForm.date) {
         Alert.alert('Error', 'La fecha del evento es obligatoria.');
         return;
       }
-  
-      if (!allDay && (!startHour || !endHour)) {
+
+      if (!eventForm.allDay && (!eventForm.startHour || !eventForm.endHour)) {
         Alert.alert('Error', 'Debes seleccionar hora de inicio y finalización.');
         return;
       }
-  
+
       payload = {
-        event_title: title,
-        event_description: description,
-        event_date: moment(date).format('YYYY-MM-DD'),
-        event_start_hour: combineDateAndTime(date, startHour),
-        event_final_hour: combineDateAndTime(date, endHour),
-        all_day: allDay,
+        event_title: eventForm.title,
+        event_description: eventForm.description,
+        event_date: moment(eventForm.date).format('YYYY-MM-DD'),
+        event_start_hour: combineDateAndTime(eventForm.date, eventForm.startHour),
+        event_final_hour: combineDateAndTime(eventForm.date, eventForm.endHour),
+        all_day: eventForm.allDay,
         ...commonData,
       };
-    }
-  
-    else if (type === 'curso') {
-      if (!date) {
+    } else if (type === 'curso') {
+      if (!courseForm.date) {
         Alert.alert('Error', 'La fecha del curso es obligatoria.');
         return;
       }
-  
+
       payload = {
-        course_title: title,
+        course_title: courseForm.title,
         course_type: 'virtual',
-        course_start_date: moment(date).format('YYYY-MM-DD'),
-        course_final_date: moment(date).format('YYYY-MM-DD'),
-        location,
-        schedule,
+        course_start_date: moment(courseForm.date).format('YYYY-MM-DD'),
+        course_final_date: moment(courseForm.date).format('YYYY-MM-DD'),
+        location: courseForm.location,
+        schedule: courseForm.schedule,
         professor_id: 1,
         ...commonData,
       };
-    }
-  
-    else if (type === 'actividad') {
-      const scheduleItems = Object.values(activitySchedule).filter(s => s.active);
-  
-      if (!activityStartDate || !activityEndDate || scheduleItems.length === 0) {
+    } else if (type === 'actividad') {
+      if (!activityForm.title) {
+        Alert.alert('Error', 'El título es obligatorio.');
+        return;
+      }
+      const scheduleItems = Object.values(activityForm.schedule).filter(s => s.active);
+
+      if (!activityForm.startDate || !activityForm.endDate || scheduleItems.length === 0) {
         Alert.alert('Error', 'Debes seleccionar fechas y al menos un día con horario.');
         return;
       }
-  
+
       const formattedSchedule = scheduleItems.reduce((acc, curr, index) => {
         acc[index + 1] = {
           date: curr.day,
@@ -113,17 +100,17 @@ export default function CreateEventScreen() {
         };
         return acc;
       }, {} as any);
-  
+
       payload = {
-        activity_title: title,
-        activity_start_date: moment(activityStartDate).format('YYYY-MM-DD'),
-        activity_final_date: moment(activityEndDate).format('YYYY-MM-DD'),
-        location,
+        activity_title: activityForm.title,
+        activity_start_date: moment(activityForm.startDate).format('YYYY-MM-DD'),
+        activity_final_date: moment(activityForm.endDate).format('YYYY-MM-DD'),
+        location: activityForm.location,
         schedule: formattedSchedule,
         ...commonData,
       };
     }
-  
+
     try {
       await create(type, payload);
       Alert.alert('Éxito', `${type} creado correctamente.`);
@@ -132,31 +119,6 @@ export default function CreateEventScreen() {
       console.error(error);
       Alert.alert('Error', 'No se pudo crear el evento.');
     }
-  };
-  
-
-  const handleAllDayToggle = (value: boolean) => {
-    setAllDay(value);
-    if (value && date) {
-      const start = moment(date).set({ hour: 0, minute: 0, second: 0 }).toDate();
-      const end = moment(date).set({ hour: 23, minute: 59, second: 0 }).toDate();
-      setStartHour(start);
-      setEndHour(end);
-    } else {
-      setStartHour(null);
-      setEndHour(null);
-    }
-  };
-
-  const handleChangeScheduleDay = (
-    day: string,
-    field: keyof DaySchedule,
-    value: any
-  ) => {
-    setActivitySchedule((prev) => ({
-      ...prev,
-      [day]: { ...prev[day], [field]: value },
-    }));
   };
 
   return (
@@ -168,50 +130,53 @@ export default function CreateEventScreen() {
       {type === 'evento' && (
         <EventForm
           type={type}
-          title={title}
-          description={description}
-          date={date}
-          startHour={startHour}
-          endHour={endHour}
-          allDay={allDay}
-          onChangeTitle={setTitle}
-          onChangeDescription={setDescription}
-          onChangeDate={setDate}
-          onChangeStartHour={setStartHour}
-          onChangeEndHour={setEndHour}
-          onChangeAllDay={handleAllDayToggle}
+          title={eventForm.title}
+          description={eventForm.description}
+          date={eventForm.date}
+          startHour={eventForm.startHour}
+          endHour={eventForm.endHour}
+          allDay={eventForm.allDay}
+          onChangeTitle={eventForm.setTitle}
+          onChangeDescription={eventForm.setDescription}
+          onChangeDate={eventForm.setDate}
+          onChangeStartHour={eventForm.setStartHour}
+          onChangeEndHour={eventForm.setEndHour}
+          onChangeAllDay={eventForm.setAllDay}
           onSubmit={handleSubmit}
         />
       )}
 
       {type === 'curso' && (
         <CourseForm
-          title={title}
-          date={date}
-          location={location}
-          schedule={schedule}
-          onChangeTitle={setTitle}
-          onChangeDate={setDate}
-          onChangeLocation={setLocation}
-          onChangeSchedule={setSchedule}
+          title={courseForm.title}
+          date={courseForm.date ? courseForm.date.toISOString().split('T')[0] : ''}
+          location={courseForm.location}
+          schedule={courseForm.schedule}
+          onChangeTitle={courseForm.setTitle}
+          onChangeDate={(text) => {
+            const parsed = new Date(text);
+            if (!isNaN(parsed.getTime())) courseForm.setDate(parsed);
+          }}
+          onChangeLocation={courseForm.setLocation}
+          onChangeSchedule={courseForm.setSchedule}
           onSubmit={handleSubmit}
         />
       )}
 
       {type === 'actividad' && (
         <ActivityForm
-        title={title}
-        startDate={activityStartDate}
-        endDate={activityEndDate}
-        location={location}
-        schedule={activitySchedule}
-        onChangeTitle={setTitle}
-        onChangeStartDate={setActivityStartDate}
-        onChangeEndDate={setActivityEndDate}
-        onChangeLocation={setLocation}
-        onChangeScheduleDay={handleChangeScheduleDay}
-        onSubmit={handleSubmit}
-      />      
+          title={activityForm.title}
+          startDate={activityForm.startDate}
+          endDate={activityForm.endDate}
+          location={activityForm.location}
+          schedule={activityForm.schedule}
+          onChangeTitle={activityForm.setTitle}
+          onChangeStartDate={activityForm.setStartDate}
+          onChangeEndDate={activityForm.setEndDate}
+          onChangeLocation={activityForm.setLocation}
+          onChangeScheduleDay={activityForm.updateScheduleDay}
+          onSubmit={handleSubmit}
+        />
       )}
     </ScrollView>
   );
