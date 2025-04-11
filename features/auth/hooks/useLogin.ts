@@ -23,6 +23,7 @@ export const useLogin = () => {
                 userId: data.user_id,
                 email: data.email,
                 fullname: data.full_name,
+                area: data.area,
             };
             setAuth(authData);
             clearFields();

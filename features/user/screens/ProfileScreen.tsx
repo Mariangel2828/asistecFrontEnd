@@ -25,6 +25,9 @@ export default function ProfileScreen() {
         <Text style={styles.label}>Correo:</Text>
         <Text style={styles.value}>{auth.email}</Text>
 
+        <Text style={styles.label}>Area:</Text>
+        <Text style={styles.value}>{auth.area}</Text>
+
         <Text style={styles.label}>ID de usuario:</Text>
         <Text style={styles.value}>{auth.userId}</Text>
       </View>

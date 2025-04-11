@@ -10,6 +10,7 @@ export type AuthData = {
     userId: string;
     email: string;
     fullname: string;
+    major: string;
 };
 
     const AuthContext = createContext<any>(null);
