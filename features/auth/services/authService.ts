@@ -6,6 +6,9 @@ export const registerUser = async (userData: {
     mail: string;
     area_id: string;
     password: string;
+    carnet_number: string;
+    birth_date: string;
+    gender: string;
 }) => {
     const response = await api.post('/api/users/user_create', userData); // this function is used to call the api and register the user
     return response.data;

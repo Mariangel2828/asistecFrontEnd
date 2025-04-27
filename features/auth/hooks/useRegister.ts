@@ -14,10 +14,13 @@ export const useRegister = () => {
     const [email, setEmail] = useState('');
     const [areaId, setAreaId] = useState('');
     const [password, setPassword] = useState('');
+    const [carnetNumber, setCarnetNumber] = useState('');
+    const [gender, setGender] = useState('');
+    const [birthdate, setBirthdate] = useState('');
 
     const handleRegister = async () => {
     try {
-        await registerUser({ name, lastname, mail: email, area_id: areaId, password }); // this function is used to register the user when we had the data
+        await registerUser({ name, lastname, mail: email, area_id: areaId, password, carnet_number:carnetNumber, gender, birth_date: birthdate }); // this function is used to register the user when we had the data
         alert('Usuario creado exitosamente');
         clearFields();
         router.replace('/login');
@@ -33,6 +36,9 @@ export const useRegister = () => {
     setEmail('');
     setAreaId('');
     setPassword('');
+    setCarnetNumber('');
+    setGender('');
+    setBirthdate('');
     };
 
     return {
@@ -47,5 +53,11 @@ export const useRegister = () => {
     password,
     setPassword,
     handleRegister,
+    carnetNumber,
+    setCarnetNumber,
+    gender,
+    setGender,
+    birthdate,
+    setBirthdate,
     };
     };
