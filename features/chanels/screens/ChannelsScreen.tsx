@@ -46,7 +46,7 @@ export default function ChannelsScreen() {
             });
             } else {
             try {
-                await subscribeToChannel(auth.userId, channel.channel_id, false, false);
+                await subscribeToChannel(auth.userId, channel.channel_id, false, true);
                 await refetch();
             } catch (err) {
                 console.error('Error al suscribirse:', err);
