@@ -20,3 +20,12 @@ export const fetchUserActivities = async (userId: number) => {
     });
     return response.data;
 };
+
+// new endpoint to get all events, courses and activities together
+
+export const fetchUserAllEvents = async (userId: number) => {
+    const response = await api.get('/api/users/next_activities', {
+        params: { user_id: userId },
+    });
+    return response.data;
+};
