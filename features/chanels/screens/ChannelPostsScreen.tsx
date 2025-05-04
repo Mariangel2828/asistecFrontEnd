@@ -24,7 +24,6 @@ import moment from 'moment';
  * Ejemplo de uso de ruta:
  * router.push({ pathname: '/chanels/posts', params: { id: canal.channel_id, name: canal.channel_name } })
  * 
- * TODO: El backend aún no regresa el titulo de la publicación, por lo que se muestra como "Sin título"
  */
 
 const getBadgeStyle = (category: string) => {
