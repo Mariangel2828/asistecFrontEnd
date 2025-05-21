@@ -4,11 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 export default function TabLayout() {
   return (
     <Tabs
-    screenOptions={{
-        headerTitle: 'Asistec',
+      screenOptions={{
+        headerShown: false, // Oculta el header en todas las pestañas
         tabBarActiveTintColor: '#2E7BFF',
         tabBarInactiveTintColor: '#000',
-    }}>
+      }}
+    >
       <Tabs.Screen
         name="home"
         options={{

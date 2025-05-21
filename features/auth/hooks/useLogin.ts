@@ -11,6 +11,7 @@ export const useLogin = () => {
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
+        console.log(email, password)
         if (!email.trim() || !password.trim()) {
         alert('Por favor, complete todos los campos.');
         return;

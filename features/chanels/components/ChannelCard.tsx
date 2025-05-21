@@ -29,53 +29,75 @@ type Props = {
  */
 
 export default function ChannelCard({ name, description, isSubscribed, onPress, onUnsubscribe }: Props) {
-return (
-    <View style={styles.card}>
-        <Text style={styles.title}>{name}</Text>
-        <Text style={styles.description}>{description}</Text>
+    return (
+        <View style={styles.card}>
+            <Text style={styles.title}>{name}</Text>
+            <Text style={styles.description}>{description}</Text>
 
-        <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text style={styles.buttonText}>
-            {isSubscribed ? 'Ver publicaciones' : 'Suscribirse'}
-        </Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={styles.primaryButton} onPress={onPress}>
+                <Text style={styles.primaryText}>
+                    {isSubscribed ? 'Ver publicaciones' : 'Suscribirse'}
+                </Text>
+            </TouchableOpacity>
 
-        {isSubscribed && (
-        <TouchableOpacity style={styles.unsubscribeButton} onPress={onUnsubscribe}>
-            <Text style={styles.unsubscribeText}>Desuscribirse</Text>
-        </TouchableOpacity>
-        )}
-    </View>
+            {isSubscribed && onUnsubscribe && (
+                <TouchableOpacity style={styles.secondaryButton} onPress={onUnsubscribe}>
+                    <Text style={styles.secondaryText}>Desuscribirse</Text>
+                </TouchableOpacity>
+            )}
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#f0f0f0',
-        borderRadius: 10,
-        padding: 12,
-        marginBottom: 12,
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 16,
+        alignItems: 'center', // centra contenido horizontalmente
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+        elevation: 2,
     },
-    title: { fontSize: 16, fontWeight: '600' },
-    description: { fontSize: 14, color: '#555', marginBottom: 8 },
-    button: {
-        alignSelf: 'flex-start',
-        backgroundColor: '#007bff',
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        borderRadius: 6,
-        marginBottom: 8,
+    title: {
+        fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 4,
+        color: '#2c3e50',
+        textAlign: 'center',
     },
-    buttonText: { color: '#fff', fontWeight: 'bold' },
-    unsubscribeButton: {
-        alignSelf: 'flex-start',
-        backgroundColor: '#dc3545',
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        borderRadius: 6,
+    description: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 16,
+        textAlign: 'center',
     },
-    unsubscribeText: {
+    primaryButton: {
+        width: '100%',
+        backgroundColor: '#466887',
+        paddingVertical: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    primaryText: {
         color: '#fff',
-        fontWeight: 'bold',
+        fontWeight: '600',
+        fontSize: 14,
     },
-    });
+    secondaryButton: {
+        width: '100%',
+        backgroundColor: '#EDEDED',
+        paddingVertical: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    secondaryText: {
+        color: '#466887',
+        fontWeight: '600',
+        fontSize: 14,
+    },
+});

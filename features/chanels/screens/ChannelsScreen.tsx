@@ -76,7 +76,7 @@ export default function ChannelsScreen() {
 return (
         <View style={styles.container}>
         <ChannelSection
-            title="🔔 Canales suscritos"
+            title="Canales suscritos"
             channels={subscribed}
             isSubscribed={true}
             onPress={(c) => handlePress(c, true)}
@@ -85,7 +85,7 @@ return (
         />
 
         <ChannelSection
-            title="➕ Canales disponibles"
+            title="Canales disponibles"
             channels={available}
             isSubscribed={false}
             onPress={(c) => handlePress(c, false)}
@@ -96,6 +96,17 @@ return (
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, paddingTop: 40 },
-    center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-});
+    container: {
+      flex: 1,
+      padding: 16,
+      paddingTop: 40,
+      backgroundColor: '#F9FAFB', // fondo general suave
+    },
+    center: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F9FAFB',
+    },
+  });
+  

@@ -18,11 +18,31 @@ export default function NewsPreview({ news }: { news: News }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 8,
-    backgroundColor: '#e8f4ff',
+    backgroundColor: '#fff',
+    paddingVertical: 24, // más alto
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    borderRadius: 12,
+    minHeight: 120, // asegura altura mínima
+
+    // Sombra suave para iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+
+    // Elevación para Android
+    elevation: 2,
+    justifyContent: 'center', // centra contenido verticalmente
   },
-  title: { fontSize: 16, fontWeight: '600' },
-  date: { fontSize: 13, color: '#555' },
+  title: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+    color: '#333',
+  },
+  date: {
+    fontSize: 14,
+    color: '#777',
+  },
 });

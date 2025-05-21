@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function ProfileScreen() {
   const { auth, setAuth } = useAuth();
@@ -16,7 +17,8 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>👤 Mi perfil</Text>
+      <Ionicons name="person-circle-outline" size={96} color="#466887" style={styles.icon} />
+      <Text style={styles.title}>Mi perfil</Text>
 
       <View style={styles.info}>
         <Text style={styles.label}>Nombre completo:</Text>
@@ -25,7 +27,7 @@ export default function ProfileScreen() {
         <Text style={styles.label}>Correo:</Text>
         <Text style={styles.value}>{auth.email}</Text>
 
-        <Text style={styles.label}>Area:</Text>
+        <Text style={styles.label}>Área:</Text>
         <Text style={styles.value}>{auth.area}</Text>
 
         <Text style={styles.label}>ID de usuario:</Text>
@@ -40,16 +42,56 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: 'center' },
-  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
-  info: { marginBottom: 30 },
-  label: { fontSize: 14, color: '#666' },
-  value: { fontSize: 16, fontWeight: '600', marginBottom: 12 },
-  logoutButton: {
-    backgroundColor: '#dc3545',
-    padding: 12,
-    borderRadius: 8,
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: '#F9FAFB',
     alignItems: 'center',
+    justifyContent: 'center', // centra verticalmente
   },
-  logoutText: { color: '#fff', fontWeight: 'bold' },
+  icon: {
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 24,
+    color: '#2c3e50',
+  },
+  info: {
+    alignSelf: 'stretch',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 30,
+
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  label: {
+    fontSize: 14,
+    color: '#666',
+  },
+  value: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 16,
+    color: '#333',
+  },
+  logoutButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: '#cc4444',
+    backgroundColor: '#fff',
+  },
+  logoutText: {
+    color: '#cc4444',
+    fontWeight: '600',
+    fontSize: 14,
+  },
 });
