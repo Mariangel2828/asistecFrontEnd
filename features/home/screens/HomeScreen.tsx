@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useEvents } from '@/features/home/hooks/useEvents';
 import { useNews } from '@/features/home/hooks/useNews';
@@ -14,15 +14,15 @@ export default function HomeScreen() {
   const { auth } = useAuth();
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>Hola {auth?.fullname} 👋</Text>
 
       <Text style={styles.sectionTitle}>Próximos eventos</Text>
-      <FlatList
-        data={events.slice(0, 3)}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <EventPreview event={item} />}
-      />
+      <View style={styles.fixedSection}>
+        {events.slice(0, 3).map((event) => (
+          <EventPreview key={event.id} event={event} />
+        ))}
+      </View>
       <TouchableOpacity
         style={styles.flatButton}
         onPress={() => router.push('/(tabs)/events')}
@@ -31,24 +31,24 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <Text style={styles.sectionTitle}>Últimas noticias</Text>
-      <FlatList
-        data={news.slice(0, 3)}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <NewsPreview news={item} />}
-      />
+      <View style={styles.fixedSection}>
+        {news.slice(0, 3).map((n) => (
+          <NewsPreview key={n.id} news={n} />
+        ))}
+      </View>
       <TouchableOpacity
         style={styles.flatButton}
         onPress={() => router.push('/(tabs)/channels')}
       >
         <Text style={styles.flatButtonText}>Ver todas las noticias</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
+const CARD_HEIGHT = 140; // Altura aproximada por card (ajusta según diseño final)
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 20,
     paddingTop: 40,
   },
@@ -60,14 +60,17 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginTop: 50,
-    marginBottom: 20,
+    marginTop: 40,
+    marginBottom: 16,
+  },
+  fixedSection: {
+    gap: 0, 
   },
   flatButton: {
-    marginTop: 10,
+    marginTop: 12,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: '#466887', // azul pastel
+    backgroundColor: '#466887',
     borderRadius: 10,
     alignItems: 'center',
   },

@@ -31,7 +31,6 @@ const RegisterScreen = () => {
 
   const { majors } = useMajors();
 
-  // Estados para el ComboBox de género
   const [open, setOpen] = useState(false);
   const [genderOptions, setGenderOptions] = useState([
     { label: 'Masculino', value: 'M' },
@@ -40,27 +39,21 @@ const RegisterScreen = () => {
   ]);
 
   const [openMajor, setOpenMajor] = useState(false);
-  // Estado para almacenar las carreras en el formato correcto
   const [formattedMajors, setFormattedMajors] = useState([]);
 
-  // Estados para el DatePicker
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateText, setDateText] = useState('');
 
-  // Función para manejar el cambio de fecha
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === 'ios'); // En iOS se mantiene visible, en Android se cierra
+    setShowDatePicker(Platform.OS === 'ios');
     setDate(currentDate);
-    
-    // Formatear la fecha como YYYY-MM-DD
     const formattedDate = formatDate(currentDate);
     setDateText(formattedDate);
-    setBirthdate(formattedDate); // Actualizar el estado en useRegister
+    setBirthdate(formattedDate);
   };
 
-  // Función para formatear la fecha a YYYY-MM-DD
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -68,12 +61,10 @@ const RegisterScreen = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // Abrir el selector de fecha
   const showDatepicker = () => {
     setShowDatePicker(true);
   };
 
-  // Convertir majors al formato que espera DropDownPicker
   useEffect(() => {
     if (majors && majors.length > 0) {
       const formattedItems = majors.map(major => ({
@@ -84,12 +75,10 @@ const RegisterScreen = () => {
     }
   }, [majors]);
 
-  // Inicializar dateText si birthdate ya tiene un valor
   useEffect(() => {
     if (birthdate) {
       setDateText(birthdate);
       try {
-        // Intentar convertir la cadena birthdate a un objeto Date
         const [year, month, day] = birthdate.split('-');
         setDate(new Date(parseInt(year), parseInt(month) - 1, parseInt(day)));
       } catch (error) {
@@ -101,10 +90,22 @@ const RegisterScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={{ width: '80%', marginTop: '20%' }}>
+        <Text
+          style={{
+            alignSelf: "center",
+            fontSize: 24,
+            marginBottom: 24,
+            color: "#466887",
+            fontWeight: 'bold'
+          }}
+        >
+          Registro de Usuario
+        </Text>
+
         <Input
           placeholder="Nombre"
-          leftIcon={<Icon name="perm-identity" type="material" color="#769ECB" />}
-          inputContainerStyle={{ borderBottomWidth: 0 }}
+          leftIcon={<Icon name="perm-identity" type="material" color="#466887" />}
+          inputContainerStyle={styles.inputContainer}
           style={styles.inputs}
           value={name}
           onChangeText={setName}
@@ -112,41 +113,31 @@ const RegisterScreen = () => {
 
         <Input
           placeholder="Apellido"
-          leftIcon={<Icon name="perm-identity" type="material" color="#769ECB" />}
-          inputContainerStyle={{ borderBottomWidth: 0 }}
+          leftIcon={<Icon name="perm-identity" type="material" color="#466887" />}
+          inputContainerStyle={styles.inputContainer}
           style={styles.inputs}
           value={lastname}
           onChangeText={setLastName}
         />
 
-        <View style={{ marginBottom: 20 }}>
-          <View style={styles.dropdownWithIcon}>
-            <Icon
-              name="school"
-              type="material"
-              color="#769ECB"
-              style={styles.dropdownIcon}
-            />
-            <DropDownPicker
-              open={openMajor}
-              value={areaId}
-              items={formattedMajors} // Usar los datos formateados
-              setOpen={setOpenMajor}
-              setValue={setAreaId}
-              placeholder="Selecciona tu carrera..."
-              style={styles.dropdown}
-              dropDownContainerStyle={styles.dropdownContainer}
-              listMode="SCROLLVIEW"
-              zIndex={2500}
-              zIndexInverse={1500}
-            />
-          </View>
-        </View>
+        <DropDownPicker
+          open={openMajor}
+          value={areaId}
+          items={formattedMajors}
+          setOpen={setOpenMajor}
+          setValue={setAreaId}
+          placeholder="Selecciona tu carrera..."
+          style={styles.inputLikePicker}
+          dropDownContainerStyle={styles.dropdownContainer}
+          listMode="SCROLLVIEW"
+          zIndex={2500}
+          zIndexInverse={1500}
+        />
 
         <Input
           placeholder="Correo electrónico"
-          leftIcon={<Icon name="email" type="material" color="#769ECB" />}
-          inputContainerStyle={{ borderBottomWidth: 0 }}
+          leftIcon={<Icon name="email" type="material" color="#466887" />}
+          inputContainerStyle={styles.inputContainer}
           style={styles.inputs}
           autoCapitalize="none"
           value={email}
@@ -156,46 +147,35 @@ const RegisterScreen = () => {
         <Input
           placeholder="Contraseña"
           secureTextEntry
-          leftIcon={<Icon name="lock-closed-outline" type="ionicon" color="#769ECB" />}
-          inputContainerStyle={{ borderBottomWidth: 0 }}
+          leftIcon={<Icon name="lock-closed-outline" type="ionicon" color="#466887" />}
+          inputContainerStyle={styles.inputContainer}
           style={styles.inputs}
           value={password}
           onChangeText={setPassword}
         />
 
-        <View style={{ marginBottom: 20 }}>
-          <View style={styles.dropdownWithIcon}>
-            <Icon
-              name="wc"
-              type="material"
-              color="#769ECB"
-              style={styles.dropdownIcon}
-            />
-            <DropDownPicker
-              open={open}
-              value={gender}
-              items={genderOptions}
-              setOpen={setOpen}
-              setValue={setGender}
-              setItems={setGenderOptions}
-              placeholder="Selecciona tu género..."
-              style={styles.dropdown}
-              dropDownContainerStyle={styles.dropdownContainer}
-              listMode="SCROLLVIEW"
-              zIndex={3000}
-              zIndexInverse={1000}
-            />
-          </View>
-        </View>
+        <DropDownPicker
+          open={open}
+          value={gender}
+          items={genderOptions}
+          setOpen={setOpen}
+          setValue={setGender}
+          setItems={setGenderOptions}
+          placeholder="Selecciona tu género..."
+          style={styles.inputLikePicker}
+          dropDownContainerStyle={styles.dropdownContainer}
+          listMode="SCROLLVIEW"
+          zIndex={3000}
+          zIndexInverse={1000}
+        />
 
-        {/* DatePicker para fecha de nacimiento */}
         <TouchableOpacity onPress={showDatepicker} style={styles.datePickerButton}>
-          <Icon name="calendar-today" type="material" color="#769ECB" />
+          <Icon name="calendar-today" type="material" color="#466887" />
           <Text style={styles.datePickerButtonText}>
             {dateText ? dateText : "Selecciona tu fecha de nacimiento"}
           </Text>
         </TouchableOpacity>
-        
+
         {showDatePicker && (
           <DateTimePicker
             testID="dateTimePicker"
@@ -203,14 +183,14 @@ const RegisterScreen = () => {
             mode="date"
             display="default"
             onChange={onChangeDate}
-            maximumDate={new Date()} // No permite fechas futuras
+            maximumDate={new Date()}
           />
         )}
 
         <Input
           placeholder="Número de carnet"
-          leftIcon={<Icon name="badge" type="material" color="#769ECB" />}
-          inputContainerStyle={{ borderBottomWidth: 0 }}
+          leftIcon={<Icon name="badge" type="material" color="#466887" />}
+          inputContainerStyle={styles.inputContainer}
           style={styles.inputs}
           value={carnetNumber}
           onChangeText={setCarnetNumber}
@@ -233,86 +213,66 @@ const RegisterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingBottom: 60,
+    paddingBottom: 150,
+    backgroundColor: '#F9FAFB',
   },
   inputs: {
-    padding: 15,
-    color: '#00000066',
-    borderBottomWidth: 1,
-    borderBottomColor: '#00000066',
-  },
-  label: {
-    marginLeft: 10,
-    marginBottom: 5,
-    fontWeight: '500',
+    fontSize: 15,
     color: '#333',
-    fontSize: 14,
+    paddingLeft: 8,
   },
-  pickerWrapper: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 20,
+  inputContainer: {
+    backgroundColor: '#F1F5F9',
+    borderRadius: 10,
     paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    paddingVertical: 2,
+    marginBottom: 16,
+    borderBottomWidth: 0,
   },
-  dropdownWithIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    backgroundColor: '#fff',
-    paddingHorizontal: 10,
-    position: 'relative',
-    zIndex: 3000,
-  },
-  dropdownIcon: {
-    marginRight: 10,
-  },
-  dropdown: {
-    flex: 1,
-    backgroundColor: 'transparent',
+  inputLikePicker: {
+    backgroundColor: '#F1F5F9',
+    borderRadius: 10,
     borderColor: 'transparent',
+    minHeight: 48,
+    paddingHorizontal: 10,
+    marginBottom: 16,
+    justifyContent: 'center',
   },
   dropdownContainer: {
     borderColor: '#ccc',
     marginTop: 2,
+    backgroundColor: '#fff',
   },
   datePickerButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    backgroundColor: '#fff',
-    padding: 15,
+    backgroundColor: '#F1F5F9',
+    borderRadius: 10,
+    padding: 14,
     marginBottom: 20,
   },
   datePickerButtonText: {
     marginLeft: 10,
-    color: '#00000066',
+    color: '#666',
   },
   loginButton: {
     width: 300,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'white',
-    borderWidth: 2,
-    padding: 14,
-    backgroundColor: '#769ECB',
-    borderRadius: 20,
+    paddingVertical: 14,
+    backgroundColor: '#466887',
+    borderRadius: 12,
     marginTop: 20,
   },
   loginButtonText: {
     textAlign: 'center',
-    fontSize: 19,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '600',
     color: 'white',
   },
   createAccountButton: {
     marginTop: 20,
-    color: '#00000066',
+    color: '#666',
     fontSize: 14,
   },
 });

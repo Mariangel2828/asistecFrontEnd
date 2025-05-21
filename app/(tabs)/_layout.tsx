@@ -5,7 +5,9 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false, // Oculta el header en todas las pestañas
+        headerShown: true, 
+        tabBarShowLabel: false,
+        headerTitle: () => null, 
         tabBarActiveTintColor: '#2E7BFF',
         tabBarInactiveTintColor: '#000',
       }}

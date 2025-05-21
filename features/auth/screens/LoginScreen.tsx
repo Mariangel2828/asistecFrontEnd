@@ -12,49 +12,49 @@ const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
-        <Image
-            style={styles.imageBackground}
-            source={require('../../../assets/images/loginImage.png')}
-        />
-
-        <View style={{ width: '80%' }}>
-            <Input
-            placeholder="Correo electrónico"
-            placeholderTextColor="#00000066"
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            leftIcon={<Icon name="email" type="material" color="#769ECB" />}
-            style={styles.inputs}
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
+            <Image
+                style={styles.imageBackground}
+                source={require('../../../assets/images/loginImage.png')}
             />
 
-            <Input
-            placeholder="Contraseña"
-            placeholderTextColor="#00000066"
-            secureTextEntry
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            leftIcon={<Icon name="lock-closed-outline" type="ionicon" color="#769ECB" />}
-            style={styles.inputs}
-            value={password}
-            onChangeText={setPassword}
-            />
-        </View>
+            <View style={{ width: '80%' }}>
+                <Input
+                    placeholder="Correo electrónico"
+                    placeholderTextColor="#666"
+                    inputContainerStyle={styles.inputContainer}
+                    leftIcon={<Icon name="email" type="material" color="#466887" />}
+                    style={styles.inputs}
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize="none"
+                />
 
-        <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
-            <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
-        </TouchableOpacity>
+                <Input
+                    placeholder="Contraseña"
+                    placeholderTextColor="#666"
+                    secureTextEntry
+                    inputContainerStyle={styles.inputContainer}
+                    leftIcon={<Icon name="lock-closed-outline" type="ionicon" color="#466887" />}
+                    style={styles.inputs}
+                    value={password}
+                    onChangeText={setPassword}
+                />
+            </View>
 
-        <TouchableOpacity onPress={() => router.push('/register')}>
-            <Text style={styles.createAccountButton}>
-            ¿Todavía no tienes una cuenta? <Text style={{ color: 'black' }}>Registrate</Text>
-            </Text>
-        </TouchableOpacity>
+            <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
+                <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => router.push('/register')}>
+                <Text style={styles.createAccountButton}>
+                    ¿Todavía no tienes una cuenta? <Text style={{ color: 'black' }}>Registrate</Text>
+                </Text>
+            </TouchableOpacity>
         </View>
     );
-    };
+};
 
-    const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
@@ -67,33 +67,39 @@ const LoginScreen = () => {
         width: '100%',
         height: '100%',
     },
+    inputContainer: {
+        backgroundColor: '#F1F5F9',
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 2,
+        marginBottom: 16,
+        borderBottomWidth: 0,
+    },
     inputs: {
-        padding: 15,
-        color: '#00000066',
-        borderBottomWidth: 1,
-        borderBottomColor: '#00000066',
+        fontSize: 15,
+        color: '#333',
+        paddingLeft: 8,
     },
     loginButton: {
         width: 300,
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: 'white',
-        borderWidth: 2,
-        padding: 14,
-        backgroundColor: '#769ECB',
-        borderRadius: 20,
+        paddingVertical: 14,
+        backgroundColor: '#466887',
+        borderRadius: 12,
+        marginTop: 10,
     },
     loginButtonText: {
         textAlign: 'center',
-        fontSize: 19,
-        fontWeight: '700',
+        fontSize: 16,
+        fontWeight: '600',
         color: 'white',
     },
     createAccountButton: {
         marginTop: 20,
-        color: '#00000066',
+        color: '#666',
         fontSize: 14,
     },
-    });
+});
 
 export default LoginScreen;
