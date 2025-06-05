@@ -12,7 +12,10 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
-      }
+      },
+      "env": {
+    "API_URL_DEV": "https://backend-asistec-hjsx.onrender.com" 
+  }
     },
     "production": {
       "android": {

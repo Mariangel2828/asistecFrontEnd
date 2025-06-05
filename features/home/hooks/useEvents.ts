@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { fetchUserAllEvents } from '../services/eventsService';
 import { useAuth } from '@/features/auth/context/AuthContext';
 
@@ -16,12 +16,17 @@ export const useEvents = () => {
   const [events, setEvents] = useState<UnifiedEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!auth?.userId) return;
 
-    const loadEvents = async () => {
+
+
+  
+
+    const loadEvents = useCallback(async () => {
+
+      setLoading(true);
       try {
         const rawData = await fetchUserAllEvents(Number(auth.userId));
+
 
         const normalized: UnifiedEvent[] = rawData.map((item: any) => ({
           id: String(item.id),
@@ -31,8 +36,8 @@ export const useEvents = () => {
           location: item.location,
           // estandariza el type si es necesario
           type: item.type === 'event' ? 'evento'
-               : item.type === 'course' ? 'curso'
-               : 'actividad',
+            : item.type === 'course' ? 'curso'
+              : 'actividad',
         }));
 
         setEvents(normalized);
@@ -41,10 +46,13 @@ export const useEvents = () => {
       } finally {
         setLoading(false);
       }
-    };
+    }, [auth]);
 
-    loadEvents();
-  }, [auth]);
+    useEffect(() => {
+      loadEvents();
+    }, [loadEvents]);
 
-  return { events, loading };
-};
+
+    return { events, loading, refetch: loadEvents };
+  }
+

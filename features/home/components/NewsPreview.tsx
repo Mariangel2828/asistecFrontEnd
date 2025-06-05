@@ -1,21 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 type News = {
   id: string;
   title: string;
   date: string;
+  channelName: string; // <-- Propiedad nueva
 };
 
 export default function NewsPreview({ news }: { news: News }) {
   return (
     <View style={styles.card}>
       <View style={styles.banner}>
-        <Text style={styles.bannerText}>📰 DEVESA</Text>
+        {/* Usamos el nombre del canal que viene de la API */}
+        
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.title}>{news.title}</Text>
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{news.title}</Text>
         <Text style={styles.date}>{news.date}</Text>
       </View>
     </View>
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   banner: {
-    backgroundColor: '#dce6f2', // azul claro editorial
+    backgroundColor: '#dce6f2',
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
@@ -53,6 +55,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#2c3e50',
     marginBottom: 8,
+    minHeight: 40, // Espacio para dos líneas
   },
   date: {
     fontSize: 14,
