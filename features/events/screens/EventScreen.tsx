@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useUserEvents } from '../hooks/useUserEvents';
@@ -7,8 +7,10 @@ import { useUserCourses } from '../hooks/useUserCourses';
 import { useUserActivities } from '../hooks/useUserActivities';
 import moment from 'moment';
 import { filterActivitiesByDate } from '../services/filterActivitiesByDate';
-import { Calendar } from 'react-native-calendars';
+import { filterCoursesByDate } from '../services/filterCoursesByDate'; // <-- Importar nueva función
+import { Calendar, DateData } from 'react-native-calendars';
 import EventList from '../components/EventList';
+
 
 /**
  * EventFilterToggle: selector visual plano y redondeado
@@ -54,7 +56,7 @@ function CalendarView({ selectedDate, onSelectDate }: {
   return (
     <Calendar
       current={selectedDate}
-      onDayPress={(day) => onSelectDate(day.dateString)}
+      onDayPress={(day: DateData) => onSelectDate(day.dateString)}      
       markedDates={{
         [selectedDate]: {
           selected: true,
@@ -92,23 +94,20 @@ export default function EventsScreen() {
   const { activities, loading: loadingActivities } = useUserActivities();
 
   const getFiltered = () => {
-    let data = [];
-
+    // La lógica de filtrado ahora es específica para cada tipo
     switch (filter) {
       case 'evento':
-        data = events;
-        break;
+        return events.filter((item) =>
+          moment(item.date).isSame(selectedDate, 'day')
+        );
       case 'curso':
-        data = courses;
-        break;
+        // Usamos la nueva función para filtrar cursos por rango
+        return filterCoursesByDate(courses, selectedDate);
       case 'actividad':
-        data = filterActivitiesByDate(activities, selectedDate);
-        break;
+        return filterActivitiesByDate(activities, selectedDate);
+      default:
+        return [];
     }
-
-    return data.filter((item) =>
-      moment(item.date).isSame(selectedDate, 'day')
-    );
   };
 
   const isLoading = () => {
@@ -137,6 +136,7 @@ export default function EventsScreen() {
       {isLoading() ? (
         <ActivityIndicator size="large" color="#466887" style={styles.loader} />
       ) : (
+        // EventList ahora recibe los datos correctamente filtrados
         <EventList events={filtered} />
       )}
 

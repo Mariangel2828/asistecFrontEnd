@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   TextInput,
@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
   Switch,
+  Platform,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -26,54 +27,6 @@ type Props = {
   onSubmit: () => void;
 };
 
-/**
- * @module EventForm
- * 
- * @description
- * Componente de formulario reutilizable para la creación de eventos.
- * Permite al usuario ingresar título, descripción, fecha, horario y si el evento es de todo el día.
- * Es controlado completamente mediante props y callbacks para mantener el estado externo.
- * 
- * @param props - Propiedades necesarias para controlar el formulario
- * @param props.type - Tipo de entidad a crear: 'evento' en este caso,
- * @param props.title - Título del evento
- * @param props.onChangeTitle - Callback para actualizar el título
- * @param props.description - Descripción del evento
- * @param props.onChangeDescription - Callback para actualizar la descripción
- * @param props.date - Fecha seleccionada del evento
- * @param props.onChangeDate - Callback para actualizar la fecha
- * @param props.startHour - Hora de inicio del evento (si no es todo el día)
- * @param props.onChangeStartHour - Callback para actualizar la hora de inicio
- * @param props.endHour - Hora de finalización del evento (si no es todo el día)
- * @param props.onChangeEndHour - Callback para actualizar la hora de finalización
- * @param props.allDay - Si el evento es de todo el día
- * @param props.onChangeAllDay - Callback para alternar el estado de todo el día
- * @param props.onSubmit - Callback que se ejecuta al enviar el formulario
- * 
- * @returns JSX.Element
- * 
- * @example
- * <EventForm
- *   type="evento"
- *   title={title}
- *   onChangeTitle={setTitle}
- *   description={description}
- *   onChangeDescription={setDescription}
- *   date={date}
- *   onChangeDate={setDate}
- *   startHour={startHour}
- *   onChangeStartHour={setStartHour}
- *   endHour={endHour}
- *   onChangeEndHour={setEndHour}
- *   allDay={allDay}
- *   onChangeAllDay={setAllDay}
- *   onSubmit={handleSubmit}
- * />
- */
-
-
-
-
 export default function EventForm({
   type,
   title,
@@ -90,6 +43,31 @@ export default function EventForm({
   onChangeAllDay,
   onSubmit,
 }: Props) {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartPicker, setShowStartPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
+
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === 'ios');
+    if (selectedDate) {
+      onChangeDate(selectedDate);
+    }
+  };
+
+  const handleStartHourChange = (event: any, selectedDate?: Date) => {
+    setShowStartPicker(Platform.OS === 'ios');
+    if (selectedDate) {
+      onChangeStartHour(selectedDate);
+    }
+  };
+
+  const handleEndHourChange = (event: any, selectedDate?: Date) => {
+    setShowEndPicker(Platform.OS === 'ios');
+    if (selectedDate) {
+      onChangeEndHour(selectedDate);
+    }
+  };
+
   return (
     <View>
       <TextInput
@@ -107,14 +85,17 @@ export default function EventForm({
       />
 
       <Text style={styles.label}>Fecha del evento</Text>
-      <DateTimePicker
-        mode="date"
-        value={date || new Date()}
-        onChange={(_, selectedDate) => {
-          if (selectedDate) onChangeDate(selectedDate);
-        }}
-        display="default"
-      />
+      <TouchableOpacity style={styles.dateButton} onPress={() => setShowDatePicker(true)}>
+        <Text>{date ? date.toLocaleDateString() : 'Seleccionar fecha'}</Text>
+      </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          mode="date"
+          value={date || new Date()}
+          onChange={handleDateChange}
+          display="default"
+        />
+      )}
 
       <View style={styles.switchRow}>
         <Text style={styles.label}>¿Todo el día?</Text>
@@ -124,24 +105,30 @@ export default function EventForm({
       {!allDay && (
         <>
           <Text style={styles.label}>Hora de inicio</Text>
-          <DateTimePicker
-            mode="time"
-            value={startHour || new Date()}
-            onChange={(_, selectedDate) => {
-              if (selectedDate) onChangeStartHour(selectedDate);
-            }}
-            display="default"
-          />
+          <TouchableOpacity style={styles.dateButton} onPress={() => setShowStartPicker(true)}>
+            <Text>{startHour ? startHour.toLocaleTimeString() : 'Seleccionar hora'}</Text>
+          </TouchableOpacity>
+          {showStartPicker && (
+            <DateTimePicker
+              mode="time"
+              value={startHour || new Date()}
+              onChange={handleStartHourChange}
+              display="default"
+            />
+          )}
 
           <Text style={styles.label}>Hora de finalización</Text>
-          <DateTimePicker
-            mode="time"
-            value={endHour || new Date()}
-            onChange={(_, selectedDate) => {
-              if (selectedDate) onChangeEndHour(selectedDate);
-            }}
-            display="default"
-          />
+          <TouchableOpacity style={styles.dateButton} onPress={() => setShowEndPicker(true)}>
+            <Text>{endHour ? endHour.toLocaleTimeString() : 'Seleccionar hora'}</Text>
+          </TouchableOpacity>
+          {showEndPicker && (
+            <DateTimePicker
+              mode="time"
+              value={endHour || new Date()}
+              onChange={handleEndHourChange}
+              display="default"
+            />
+          )}
         </>
       )}
 
@@ -165,6 +152,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 4,
+  },
+  dateButton: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 12,
   },
   switchRow: {
     flexDirection: 'row',

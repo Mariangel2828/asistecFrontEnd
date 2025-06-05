@@ -12,34 +12,6 @@ import { useCourseForm } from '../hooks/hooksForForms/useCourseForm';
 import { useActivityForm } from '../hooks/hooksForForms/useActivityForm';
 import moment from 'moment';
 
-
-/**
- * CreateEventScreen
- * 
- * Pantalla que permite la creación de un evento, curso o actividad.
- * Ofrece un formulario dinámico según el tipo seleccionado mediante un toggle.
- *
- * Características:
- * - Usa un toggle (`EventTypeToggle`) para alternar entre tres tipos: 'evento', 'curso', 'actividad'.
- * - Cada tipo tiene su propio formulario (`EventForm`, `CourseForm`, `ActivityForm`) y estado aislado mediante hooks personalizados:
- *    - `useEventForm` para eventos
- *    - `useCourseForm` para cursos
- *    - `useActivityForm` para actividades
- * - Al enviar el formulario, se construye un payload diferente según el tipo seleccionado y se envía a la API mediante `useCreateEvent`.
- * - Muestra alertas si hay errores de validación antes del envío.
- * - Redirige a la lista de eventos tras una creación exitosa.
- *
- * Hooks utilizados:
- * - `useEventForm`: manejo del estado del formulario de evento.
- * - `useCourseForm`: manejo del estado del formulario de curso.
- * - `useActivityForm`: manejo del estado del formulario de actividad.
- * - `useAuth`: contexto de autenticación para obtener el ID del usuario.
- * - `useCreateEvent`: hook para enviar el evento al backend.
- * - `useRouter`: navegación con `expo-router`.
- *
- * @returns {JSX.Element} Componente visual para crear eventos/cursos/actividades.
- */
-
 export default function CreateEventScreen() {
   const [type, setType] = useState<'evento' | 'curso' | 'actividad'>('evento');
 
@@ -60,13 +32,11 @@ export default function CreateEventScreen() {
 
   const handleSubmit = async () => {
     const commonData = {
-      user_id: auth.userId,
+      user_id: Number(auth.userId),
       notification_datetime: null,
     };
 
     let payload: any = {};
-
-    
 
     if (type === 'evento') {
       if (!eventForm.title) {
@@ -77,12 +47,10 @@ export default function CreateEventScreen() {
         Alert.alert('Error', 'La fecha del evento es obligatoria.');
         return;
       }
-
       if (!eventForm.allDay && (!eventForm.startHour || !eventForm.endHour)) {
         Alert.alert('Error', 'Debes seleccionar hora de inicio y finalización.');
         return;
       }
-
       payload = {
         event_title: eventForm.title,
         event_description: eventForm.description,
@@ -93,28 +61,44 @@ export default function CreateEventScreen() {
         ...commonData,
       };
     } else if (type === 'curso') {
-      if (!courseForm.date) {
-        Alert.alert('Error', 'La fecha del curso es obligatoria.');
-        return;
-      }
+        const scheduleItems = Object.values(courseForm.schedule).filter(s => s.active);
+        
+        if (!courseForm.title || !courseForm.professorId) {
+            Alert.alert('Error', 'El título y el ID del profesor son obligatorios.');
+            return;
+        }
 
-      payload = {
-        course_title: courseForm.title,
-        course_type: 'virtual',
-        course_start_date: moment(courseForm.date).format('YYYY-MM-DD'),
-        course_final_date: moment(courseForm.date).format('YYYY-MM-DD'),
-        location: courseForm.location,
-        schedule: courseForm.schedule,
-        professor_id: 1,
-        ...commonData,
-      };
+        if (scheduleItems.length === 0) {
+            Alert.alert('Error', 'Debes seleccionar al menos un día con horario para el curso.');
+            return;
+        }
+
+        const formattedSchedule = scheduleItems.reduce((acc: any, curr: { day: string; start_time: string; end_time: string }, index: number) => {
+        acc[index + 1] = {
+        date: curr.day,
+        start_time: curr.start_time,
+        end_time: curr.end_time,
+        };
+        return acc;
+    }, {} as any);
+
+        payload = {
+            course_title: courseForm.title,
+            course_type: courseForm.courseType,
+            course_start_date: moment(courseForm.startDate).format('YYYY-MM-DD'),
+            course_final_date: moment(courseForm.endDate).format('YYYY-MM-DD'),
+            location: courseForm.location,
+            schedule: formattedSchedule,
+            professor_id: Number(courseForm.professorId),
+            ...commonData,
+        };
     } else if (type === 'actividad') {
+      const scheduleItems = Object.values(activityForm.schedule).filter(s => s.active);
+
       if (!activityForm.title) {
         Alert.alert('Error', 'El título es obligatorio.');
         return;
       }
-      const scheduleItems = Object.values(activityForm.schedule).filter(s => s.active);
-
       if (!activityForm.startDate || !activityForm.endDate || scheduleItems.length === 0) {
         Alert.alert('Error', 'Debes seleccionar fechas y al menos un día con horario.');
         return;
@@ -141,11 +125,12 @@ export default function CreateEventScreen() {
 
     try {
       await create(type, payload);
-      Alert.alert('Éxito', `${type} creado correctamente.`);
+      Alert.alert('Éxito', `${type.charAt(0).toUpperCase() + type.slice(1)} creado correctamente.`);
       router.replace('/(tabs)/events');
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'No se pudo crear el evento.');
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.detail || 'No se pudo crear el elemento.';
+        console.error("Error creating event:", error.response?.data || error);
+        Alert.alert('Error', errorMessage);
     }
   };
 
@@ -177,16 +162,17 @@ export default function CreateEventScreen() {
       {type === 'curso' && (
         <CourseForm
           title={courseForm.title}
-          date={courseForm.date ? courseForm.date.toISOString().split('T')[0] : ''}
+          startDate={courseForm.startDate}
+          endDate={courseForm.endDate}
           location={courseForm.location}
           schedule={courseForm.schedule}
+          professorId={courseForm.professorId}
           onChangeTitle={courseForm.setTitle}
-          onChangeDate={(text) => {
-            const parsed = new Date(text);
-            if (!isNaN(parsed.getTime())) courseForm.setDate(parsed);
-          }}
+          onChangeStartDate={courseForm.setStartDate}
+          onChangeEndDate={courseForm.setEndDate}
           onChangeLocation={courseForm.setLocation}
-          onChangeSchedule={courseForm.setSchedule}
+          onChangeProfessorId={courseForm.setProfessorId}
+          onChangeScheduleDay={courseForm.updateScheduleDay}
           onSubmit={handleSubmit}
         />
       )}
