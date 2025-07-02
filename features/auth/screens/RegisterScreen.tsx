@@ -45,6 +45,9 @@ const RegisterScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateText, setDateText] = useState('');
 
+  const [showPassword, setShowPassword] = useState(false);
+
+
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(Platform.OS === 'ios');
@@ -146,8 +149,19 @@ const RegisterScreen = () => {
 
         <Input
           placeholder="Contraseña"
-          secureTextEntry
-          leftIcon={<Icon name="lock-closed-outline" type="ionicon" color="#466887" />}
+          secureTextEntry={!showPassword}
+          leftIcon={
+            <Icon name="lock-closed-outline" type="ionicon" color="#466887" />
+          }
+          rightIcon={
+            <TouchableOpacity onPress={() => setShowPassword(prev => !prev)}>
+              <Icon
+                name={showPassword ? 'eye-off' : 'eye'}
+                type="ionicon"
+                color="#466887"
+              />
+            </TouchableOpacity>
+          }
           inputContainerStyle={styles.inputContainer}
           style={styles.inputs}
           value={password}
@@ -235,7 +249,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     minHeight: 48,
     paddingHorizontal: 10,
-    marginBottom: 16,
+    marginBottom: 32,
     justifyContent: 'center',
   },
   dropdownContainer: {
