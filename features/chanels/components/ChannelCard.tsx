@@ -20,15 +20,25 @@ type Props = {
  * - description (string): Descripción del canal.
  * - isSubscribed (boolean): Indica si el usuario está suscrito al canal.
  * - onPress (function): Callback que se ejecuta al presionar el botón principal
- *   (ya sea "Ver publicaciones" o "Suscribirse").
+ * (ya sea "Ver publicaciones" o "Suscribirse").
  * - onUnsubscribe (function, opcional): Callback que se ejecuta al presionar "Desuscribirse".
- *   Solo se muestra si `isSubscribed` es `true`.
+ * Solo se muestra si `isSubscribed` es `true`.
  *
  * Estilos:
  * - Muestra una tarjeta con botones estilizados para cada acción.
  */
 
+// List of channel names where the unsubscribe button should not be shown.
+const area_names = [
+    "DEVESA",
+    "Escuela Ciencias Naturales y Exactas San Carlos",
+    "Escuela de Ciencias del Lenguaje San Carlos",
+];
+
 export default function ChannelCard({ name, description, isSubscribed, onPress, onUnsubscribe }: Props) {
+    // Check if the current channel's name is in the restricted list.
+    const isRestricted = area_names.includes(name);
+
     return (
         <View style={styles.card}>
             <Text style={styles.title}>{name}</Text>
@@ -40,7 +50,8 @@ export default function ChannelCard({ name, description, isSubscribed, onPress, 
                 </Text>
             </TouchableOpacity>
 
-            {isSubscribed && onUnsubscribe && (
+            {/* Conditionally render the unsubscribe button */}
+            {isSubscribed && onUnsubscribe && !isRestricted && (
                 <TouchableOpacity style={styles.secondaryButton} onPress={onUnsubscribe}>
                     <Text style={styles.secondaryText}>Desuscribirse</Text>
                 </TouchableOpacity>
