@@ -8,7 +8,7 @@ export default function TabLayout() {
         headerShown: true, 
         tabBarShowLabel: false,
         headerTitle: () => null, 
-        tabBarActiveTintColor: '#2E7BFF',
+        tabBarActiveTintColor: '#466887',
         tabBarInactiveTintColor: '#000',
       }}
     >

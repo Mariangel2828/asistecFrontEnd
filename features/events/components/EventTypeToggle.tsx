@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   selected: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#466887',
   },
   text: { color: '#000' },
   selectedText: { color: '#fff', fontWeight: 'bold' },
