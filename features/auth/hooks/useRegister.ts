@@ -25,8 +25,19 @@ export const useRegister = () => {
         clearFields();
         router.replace('/login');
     } catch (error: any) {
-        console.error(error.response || error);
-        alert(error.response?.data?.detail || 'Ocurrió un error al crear el usuario.');
+        const detail = error?.response?.data?.detail || '';
+        if (detail === 'Email already registered') {
+            alert('Este correo electrónico ya está registrado.');
+        } else if (detail === 'Carnet number already registered') {
+            alert('Este número de carné ya está registrado.');
+        } else if (detail.includes('not supported') || detail.includes('no permitido')) {
+            alert('Solo se permiten correos con dominio @tec.cr, @estudiantec.cr o @itcr.ac.cr');
+        } else if (!error?.response) {
+            alert('No se pudo conectar al servidor. Verifique su conexión a internet.');
+        } else {
+            console.error(error.response || error);
+            alert('Ocurrió un error al crear el usuario.');
+        }
     }
     };
 

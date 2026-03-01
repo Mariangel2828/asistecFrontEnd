@@ -30,14 +30,18 @@ export const useLogin = () => {
             clearFields();
             router.replace('/(tabs)/home');
         } catch (error: any) {
-            const detail = error?.response?.data?.detail;
+            const detail = error?.response?.data?.detail || '';
             if (detail === 'Inactive') {
-                alert('Usuario inactivo, por favor contacte al administrador');
+                alert('Usuario inactivo, por favor contacte al administrador.');
             } else if (detail === 'Invalid credentials') {
-                alert('Credenciales inválidas, por favor intente de nuevo');
+                alert('Credenciales inválidas, por favor intente de nuevo.');
+            } else if (detail.includes('not supported') || detail.includes('no permitido')) {
+                alert('Solo se permiten correos con dominio @tec.cr, @estudiantec.cr o @itcr.ac.cr');
+            } else if (!error?.response) {
+                alert('No se pudo conectar al servidor. Verifique su conexión a internet.');
             } else {
                 console.error(error);
-                alert('Error al iniciar sesión, por favor intente de nuevo');
+                alert('Error al iniciar sesión, por favor intente de nuevo.');
             }
         }
     };

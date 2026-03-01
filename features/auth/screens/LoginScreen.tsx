@@ -17,11 +17,13 @@ const LoginScreen = () => {
                 source={require('../../../assets/images/loginImage.png')}
             />
 
-            <View style={{ width: '80%' }}>
+            <View style={styles.formWrapper}>
                 <Input
                     placeholder="Correo electrónico"
                     placeholderTextColor="#666"
                     inputContainerStyle={styles.inputContainer}
+                    containerStyle={styles.inputOuter}
+                    errorStyle={{ height: 0 }}
                     leftIcon={<Icon name="email" type="material" color="#466887" />}
                     style={styles.inputs}
                     value={email}
@@ -34,22 +36,24 @@ const LoginScreen = () => {
                     placeholderTextColor="#666"
                     secureTextEntry
                     inputContainerStyle={styles.inputContainer}
+                    containerStyle={styles.inputOuter}
+                    errorStyle={{ height: 0 }}
                     leftIcon={<Icon name="lock-closed-outline" type="ionicon" color="#466887" />}
                     style={styles.inputs}
                     value={password}
                     onChangeText={setPassword}
                 />
+
+                <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
+                    <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => router.push('/register')}>
+                    <Text style={styles.linkText}>
+                        ¿Todavía no tienes una cuenta? <Text style={{ color: 'black' }}>Registrate</Text>
+                    </Text>
+                </TouchableOpacity>
             </View>
-
-            <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
-                <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => router.push('/register')}>
-                <Text style={styles.createAccountButton}>
-                    ¿Todavía no tienes una cuenta? <Text style={{ color: 'black' }}>Registrate</Text>
-                </Text>
-            </TouchableOpacity>
         </View>
     );
 };
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     imageBackground: {
         flex: 1,
@@ -67,13 +71,23 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+    formWrapper: {
+        width: '85%',
+        alignItems: 'center',
+        marginTop: 60,
+    },
+    inputOuter: {
+        width: '100%',
+        paddingHorizontal: 0,
+        marginBottom: 16,
+    },
     inputContainer: {
         backgroundColor: '#F1F5F9',
         borderRadius: 10,
         paddingHorizontal: 10,
         paddingVertical: 2,
-        marginBottom: 16,
         borderBottomWidth: 0,
+        height: 50,
     },
     inputs: {
         fontSize: 15,
@@ -81,21 +95,20 @@ const styles = StyleSheet.create({
         paddingLeft: 8,
     },
     loginButton: {
-        width: 300,
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 14,
+        height: 50,
         backgroundColor: '#466887',
         borderRadius: 12,
-        marginTop: 10,
+        marginTop: 8,
     },
     loginButtonText: {
-        textAlign: 'center',
         fontSize: 16,
         fontWeight: '600',
         color: 'white',
     },
-    createAccountButton: {
+    linkText: {
         marginTop: 20,
         color: '#666',
         fontSize: 14,

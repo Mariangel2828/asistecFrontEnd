@@ -92,23 +92,15 @@ const RegisterScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={{ width: '80%', marginTop: '20%' }}>
-        <Text
-          style={{
-            alignSelf: "center",
-            fontSize: 24,
-            marginBottom: 24,
-            color: "#466887",
-            fontWeight: 'bold'
-          }}
-        >
-          Registro de Usuario
-        </Text>
+      <View style={styles.formWrapper}>
+        <Text style={styles.title}>Registro de Usuario</Text>
 
         <Input
           placeholder="Nombre"
           leftIcon={<Icon name="perm-identity" type="material" color="#466887" />}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.inputOuter}
+          errorStyle={{ height: 0 }}
           style={styles.inputs}
           value={name}
           onChangeText={setName}
@@ -118,6 +110,8 @@ const RegisterScreen = () => {
           placeholder="Apellido"
           leftIcon={<Icon name="perm-identity" type="material" color="#466887" />}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.inputOuter}
+          errorStyle={{ height: 0 }}
           style={styles.inputs}
           value={lastname}
           onChangeText={setLastName}
@@ -141,6 +135,8 @@ const RegisterScreen = () => {
           placeholder="Correo electrónico"
           leftIcon={<Icon name="email" type="material" color="#466887" />}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.inputOuter}
+          errorStyle={{ height: 0 }}
           style={styles.inputs}
           autoCapitalize="none"
           value={email}
@@ -163,6 +159,8 @@ const RegisterScreen = () => {
             </TouchableOpacity>
           }
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.inputOuter}
+          errorStyle={{ height: 0 }}
           style={styles.inputs}
           value={password}
           onChangeText={setPassword}
@@ -205,21 +203,23 @@ const RegisterScreen = () => {
           placeholder="Número de carnet"
           leftIcon={<Icon name="badge" type="material" color="#466887" />}
           inputContainerStyle={styles.inputContainer}
+          containerStyle={styles.inputOuter}
+          errorStyle={{ height: 0 }}
           style={styles.inputs}
           value={carnetNumber}
           onChangeText={setCarnetNumber}
         />
+
+        <TouchableOpacity onPress={handleRegister} style={styles.submitButton}>
+          <Text style={styles.submitButtonText}>Crear Cuenta</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => router.replace('/login')}>
+          <Text style={styles.linkText}>
+            ¿Ya tienes una cuenta? <Text style={{ color: 'black' }}>Inicia sesión</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity onPress={handleRegister} style={styles.loginButton}>
-        <Text style={styles.loginButtonText}>Crear Cuenta</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => router.replace('/login')}>
-        <Text style={styles.createAccountButton}>
-          ¿Ya tienes una cuenta? <Text style={{ color: 'black' }}>Inicia sesión</Text>
-        </Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -227,8 +227,24 @@ const RegisterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingBottom: 150,
+    paddingBottom: 80,
     backgroundColor: '#F9FAFB',
+  },
+  formWrapper: {
+    width: '85%',
+    marginTop: '18%',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 24,
+    color: '#466887',
+    fontWeight: 'bold',
+  },
+  inputOuter: {
+    width: '100%',
+    paddingHorizontal: 0,
+    marginBottom: 16,
   },
   inputs: {
     fontSize: 15,
@@ -240,17 +256,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 2,
-    marginBottom: 16,
     borderBottomWidth: 0,
+    height: 50,
   },
   inputLikePicker: {
     backgroundColor: '#F1F5F9',
     borderRadius: 10,
     borderColor: 'transparent',
-    minHeight: 48,
-    paddingHorizontal: 10,
-    marginBottom: 32,
-    justifyContent: 'center',
+    height: 50,
+    paddingHorizontal: 14,
+    marginBottom: 16,
   },
   dropdownContainer: {
     borderColor: '#ccc',
@@ -258,34 +273,37 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   datePickerButton: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F1F5F9',
     borderRadius: 10,
-    padding: 14,
-    marginBottom: 20,
+    height: 50,
+    paddingHorizontal: 14,
+    marginBottom: 16,
   },
   datePickerButtonText: {
     marginLeft: 10,
     color: '#666',
+    fontSize: 15,
   },
-  loginButton: {
-    width: 300,
+  submitButton: {
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 14,
+    height: 50,
     backgroundColor: '#466887',
     borderRadius: 12,
-    marginTop: 20,
+    marginTop: 8,
   },
-  loginButtonText: {
-    textAlign: 'center',
+  submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
     color: 'white',
   },
-  createAccountButton: {
+  linkText: {
     marginTop: 20,
+    marginBottom: 20,
     color: '#666',
     fontSize: 14,
   },
