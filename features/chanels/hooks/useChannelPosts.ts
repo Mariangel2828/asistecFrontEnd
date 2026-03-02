@@ -26,21 +26,21 @@ export const useChannelPosts = (channelId: number) => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const load = async () => {
+    const load = async () => {
         try {
+            setLoading(true);
             const data = await fetchPostsByChannel(channelId);
-            console.log('Publicaciones cargadas:', data);
             setPosts(data);
         } catch (err) {
             console.error('Error cargando publicaciones:', err);
         } finally {
             setLoading(false);
         }
-        };
+    };
 
+    useEffect(() => {
         if (channelId) load();
     }, [channelId]);
 
-    return { posts, loading };
+    return { posts, loading, refetch: load };
 };

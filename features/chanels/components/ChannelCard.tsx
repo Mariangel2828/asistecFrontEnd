@@ -4,6 +4,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 type Props = {
     name: string;
     description: string;
+    areaId?: number;
+    userAreaId?: number;
+    isAdmin?: boolean;
     isSubscribed: boolean;
     onPress: () => void;
     onUnsubscribe?: () => void;
@@ -28,26 +31,31 @@ type Props = {
  * - Muestra una tarjeta con botones estilizados para cada acción.
  */
 
-// List of channel names where the unsubscribe button should not be shown.
-const area_names = [
-    "DEVESA",
-    "Escuela Ciencias Naturales y Exactas San Carlos",
-    "Escuela de Ciencias del Lenguaje San Carlos",
-];
+export default function ChannelCard({ name, description, areaId, userAreaId, isAdmin, isSubscribed, onPress, onUnsubscribe }: Props) {
+    const isRestricted = areaId != null && userAreaId != null && areaId === userAreaId;
 
-export default function ChannelCard({ name, description, isSubscribed, onPress, onUnsubscribe }: Props) {
-    // Check if the current channel's name is in the restricted list.
-    const isRestricted = area_names.includes(name);
+    const buttonLabel = !isSubscribed
+        ? 'Suscribirse'
+        : isAdmin
+        ? 'Administrar Canal'
+        : 'Ver publicaciones';
 
     return (
         <View style={styles.card}>
             <Text style={styles.title}>{name}</Text>
             <Text style={styles.description}>{description}</Text>
 
-            <TouchableOpacity style={styles.primaryButton} onPress={onPress}>
-                <Text style={styles.primaryText}>
-                    {isSubscribed ? 'Ver publicaciones' : 'Suscribirse'}
-                </Text>
+            {isAdmin && (
+                <View style={styles.adminBadge}>
+                    <Text style={styles.adminBadgeText}>Admin</Text>
+                </View>
+            )}
+
+            <TouchableOpacity
+                style={[styles.primaryButton, isAdmin && styles.adminButton]}
+                onPress={onPress}
+            >
+                <Text style={styles.primaryText}>{buttonLabel}</Text>
             </TouchableOpacity>
 
             {/* Conditionally render the unsubscribe button */}
@@ -110,5 +118,23 @@ const styles = StyleSheet.create({
         color: '#466887',
         fontWeight: '600',
         fontSize: 14,
+    },
+    adminButton: {
+        backgroundColor: '#2c3e50',
+    },
+    adminBadge: {
+        alignSelf: 'flex-start',
+        backgroundColor: '#2c3e50',
+        borderRadius: 6,
+        paddingHorizontal: 10,
+        paddingVertical: 3,
+        marginBottom: 10,
+    },
+    adminBadgeText: {
+        color: '#fff',
+        fontSize: 11,
+        fontWeight: '700',
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
     },
 });

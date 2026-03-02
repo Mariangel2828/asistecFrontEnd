@@ -5,12 +5,15 @@ import ChannelCard from './ChannelCard';
 type Channel = {
     channel_id: number;
     channel_name: string;
+    area_id?: number;
+    is_admin?: boolean;
     description: string;
 };
 
 type Props = {
     title: string;
     channels: Channel[];
+    userAreaId?: number;
     isSubscribed: boolean;
     onPress: (channel: Channel) => void;
     emptyMessage: string;
@@ -44,6 +47,7 @@ type Props = {
 export default function ChannelSection({
     title,
     channels,
+    userAreaId,
     isSubscribed,
     onPress,
     emptyMessage,
@@ -59,6 +63,9 @@ return (
             <ChannelCard
                 name={item.channel_name}
                 description={item.description}
+                areaId={item.area_id}
+                userAreaId={userAreaId}
+                isAdmin={item.is_admin}
                 isSubscribed={isSubscribed}
                 onPress={() => onPress(item)}
                 onUnsubscribe={

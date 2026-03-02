@@ -11,6 +11,7 @@ export type AuthData = {
     email: string;
     fullname: string;
     area: string;
+    areaId: number;
 };
 
     const AuthContext = createContext<any>(null);

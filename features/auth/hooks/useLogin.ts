@@ -25,6 +25,7 @@ export const useLogin = () => {
                 email: data.email,
                 fullname: data.full_name,
                 area: data.area,
+                areaId: data.area_id,
             };
             setAuth(authData);
             clearFields();

@@ -37,29 +37,36 @@ export default function ChannelsScreen() {
 
     const handlePress = async (channel: any, isSubscribed: boolean) => {
         if (isSubscribed) {
+            const route = channel.is_admin ? '/chanels/admin' : '/chanels/posts';
             router.push({
-                pathname: '/chanels/posts',
+                pathname: route,
                 params: {
-                id: channel.channel_id,
-                name: channel.channel_name,
+                    id: channel.channel_id,
+                    name: channel.channel_name,
                 },
             });
-            } else {
+        } else {
             try {
                 await subscribeToChannel(auth.userId, channel.channel_id, false, true);
                 await refetch();
             } catch (err) {
                 console.error('Error al suscribirse:', err);
             }
-            }
-        };
+        }
+    };
 
     const handleUnsubscribe = async (channel: any) => {
         try {
             await unsubscribeFromChannel(auth.userId, channel.channel_id);
-          await refetch(); // Actualiza listas tras desuscripción
-        } catch (err) {
-            console.error('Error al desuscribirse:', err);
+            await refetch();
+        } catch (err: any) {
+            const detail = err?.response?.data?.detail || '';
+            if (detail.includes('carrera') || detail.includes('obligatorio')) {
+                alert(detail);
+            } else {
+                console.error('Error al desuscribirse:', err);
+                alert('Error al desuscribirse del canal.');
+            }
         }
     };
 
@@ -78,15 +85,17 @@ return (
         <ChannelSection
             title="Canales suscritos"
             channels={subscribed}
+            userAreaId={auth.areaId}
             isSubscribed={true}
             onPress={(c) => handlePress(c, true)}
             emptyMessage="No estás suscrito a ningún canal."
-            onUnsubscribe={(c) => handleUnsubscribe(c)} // Pass the unsubscribe function
+            onUnsubscribe={(c) => handleUnsubscribe(c)}
         />
 
         <ChannelSection
             title="Canales disponibles"
             channels={available}
+            userAreaId={auth.areaId}
             isSubscribed={false}
             onPress={(c) => handlePress(c, false)}
             emptyMessage="No hay nuevos canales disponibles."
